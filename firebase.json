@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "my-reader-23547",
     "public": ".",
     "ignore": [
       "firebase.json",
