@@ -84,7 +84,6 @@
     .reader-content .article-body blockquote { border-left: 3px solid var(--accent); margin: 1.2em 0; padding: 4px 0 4px 18px; color: var(--text-muted); font-style: italic; }
     .reader-source { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted); }
     .reader-source a { color: var(--accent2); }
-    .fetch-status { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: 380px; max-width: 90vw; }
@@ -190,6 +189,8 @@
     appId: "1:521154548973:web:e9d38bc8502a6e1277e8e4"
   };
 
+  const DIFFBOT_TOKEN = "75d55e35c176214893d1b75f01678dc9";
+
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const COL = "articles";
@@ -206,97 +207,24 @@
     renderAll();
   });
 
-  // ── Article fetching with multiple proxies ──
+  // ── Diffbot article extraction ──
   async function fetchArticleData(url) {
-    const proxies = [
-      `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-      `https://corsproxy.io/?${encodeURIComponent(url)}`,
-      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
-    ];
+    const apiUrl = `https://api.diffbot.com/v3/article?token=${DIFFBOT_TOKEN}&url=${encodeURIComponent(url)}&paging=false`;
+    const res = await fetch(apiUrl, { signal: AbortSignal.timeout(15000) });
+    if (!res.ok) throw new Error(`Diffbot error: ${res.status}`);
+    const json = await res.json();
 
-    let html = null;
+    if (!json.objects || json.objects.length === 0) throw new Error("No content extracted");
 
-    // Try allorigins first (returns JSON)
-    try {
-      const res = await fetch(proxies[0], { signal: AbortSignal.timeout(8000) });
-      const json = await res.json();
-      if (json.contents && json.contents.length > 500) html = json.contents;
-    } catch(e) {}
-
-    // Try corsproxy (returns raw HTML)
-    if (!html) {
-      try {
-        const res = await fetch(proxies[1], { signal: AbortSignal.timeout(8000) });
-        const text = await res.text();
-        if (text && text.length > 500) html = text;
-      } catch(e) {}
-    }
-
-    // Try codetabs
-    if (!html) {
-      try {
-        const res = await fetch(proxies[2], { signal: AbortSignal.timeout(8000) });
-        const text = await res.text();
-        if (text && text.length > 500) html = text;
-      } catch(e) {}
-    }
-
-    if (!html) throw new Error("All proxies failed");
-
-    const parser = new DOMParser();
-    const doc2 = parser.parseFromString(html, "text/html");
-
-    // Fix relative URLs for images
-    doc2.querySelectorAll('img[src]').forEach(img => {
-      try {
-        img.src = new URL(img.getAttribute('src'), url).href;
-      } catch(e) {}
-    });
-
-    const title =
-      doc2.querySelector('meta[property="og:title"]')?.getAttribute('content') ||
-      doc2.querySelector('meta[name="twitter:title"]')?.getAttribute('content') ||
-      doc2.querySelector('title')?.textContent || "";
-
-    const excerpt =
-      doc2.querySelector('meta[property="og:description"]')?.getAttribute('content') ||
-      doc2.querySelector('meta[name="description"]')?.getAttribute('content') ||
-      doc2.querySelector('meta[name="twitter:description"]')?.getAttribute('content') || "";
-
-    const image =
-      doc2.querySelector('meta[property="og:image"]')?.getAttribute('content') ||
-      doc2.querySelector('meta[name="twitter:image"]')?.getAttribute('content') || "";
-
-    // Try to find main content using common selectors
-    const contentSelectors = [
-      'article', '[role="main"]', 'main', '.article-body', '.post-body',
-      '.post-content', '.entry-content', '.content-body', '.story-body',
-      '.article__body', '.article-content', '.story-content', '#article-body',
-      '.paywall', '.post', '#content', '.content'
-    ];
-
-    let articleEl = null;
-    for (const sel of contentSelectors) {
-      const el = doc2.querySelector(sel);
-      if (el && el.textContent.trim().length > 200) { articleEl = el; break; }
-    }
-
-    if (!articleEl) articleEl = doc2.body;
-
-    const clone = articleEl.cloneNode(true);
-    // Remove noise elements
-    clone.querySelectorAll([
-      'script', 'style', 'nav', 'header', 'footer', 'aside', 'form',
-      'iframe', 'button', '.ad', '.ads', '.advertisement', '.social-share',
-      '.related', '.recommended', '.newsletter', '.cookie', '.popup',
-      '[class*="share"]', '[class*="social"]', '[class*="comment"]',
-      '[class*="subscribe"]', '[id*="comment"]', '[id*="sidebar"]'
-    ].join(',')).forEach(el => el.remove());
-
-    // Convert to clean paragraphs
-    const content = clone.innerHTML;
-
-    return { title: title.trim(), excerpt: excerpt.trim(), image: image.trim(), content };
+    const obj = json.objects[0];
+    return {
+      title: obj.title || "",
+      excerpt: obj.text ? obj.text.substring(0, 200) + "…" : "",
+      image: obj.images?.[0]?.url || "",
+      content: obj.html || obj.text || "",
+      author: obj.author || "",
+      date: obj.date || ""
+    };
   }
 
   window.saveArticle = async function () {
@@ -309,14 +237,14 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>';
 
-    let articleData = { title: "", excerpt: "", image: "", content: "" };
+    let articleData = { title: "", excerpt: "", image: "", content: "", author: "", date: "" };
     let fetchSuccess = false;
 
     try {
       articleData = await fetchArticleData(url);
       fetchSuccess = true;
     } catch(e) {
-      // Will save URL only with a note
+      console.warn("Extraction failed:", e.message);
     }
 
     await addDoc(collection(db, COL), {
@@ -325,6 +253,8 @@
       excerpt: articleData.excerpt || "",
       image: articleData.image || "",
       content: articleData.content || "",
+      author: articleData.author || "",
+      date: articleData.date || "",
       domain: getDomain(url),
       tags: [],
       favourite: false,
@@ -336,7 +266,6 @@
 
     input.value = "";
     showToast(fetchSuccess ? "Article saved ✓" : "URL saved (content unavailable)", fetchSuccess ? "success" : "");
-
     btn.disabled = false;
     btn.textContent = "Save";
   };
@@ -371,11 +300,10 @@
   window.renderTagFilters = function () {
     const allTags = [...new Set(window._articles.flatMap(a => a.tags || []))].sort();
     const container = document.getElementById("tag-filters");
-    const searchHTML = `<input class="search-input" type="text" placeholder="Search…" oninput="renderArticles()" />`;
     container.innerHTML = `
       <span class="filter-tag ${window._activeTag==="all"?"active":""}" data-tag="all" onclick="filterByTag('all',this)">All</span>
       ${allTags.map(t=>`<span class="filter-tag ${window._activeTag===t?"active":""}" data-tag="${t}" onclick="filterByTag('${t}',this)">${t}</span>`).join("")}
-      ${searchHTML}`;
+      <input class="search-input" type="text" placeholder="Search…" oninput="renderArticles()" />`;
     container.querySelector(".search-input").addEventListener("input", renderArticles);
   };
 
@@ -384,7 +312,7 @@
       ? `<div class="card-image"><img src="${a.image}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='📄'" /></div>`
       : `<div class="card-image">📄</div>`;
     const tags = (a.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("");
-    const noContent = !a.fetchSuccess && !a.content ? `<div style="font-size:0.72rem;color:var(--accent);margin-top:4px">⚠ Content unavailable — opens original</div>` : "";
+    const noContent = !a.fetchSuccess ? `<div style="font-size:0.72rem;color:var(--accent);margin-top:4px">⚠ Opens original site</div>` : "";
     return `
       <div class="card ${a.read?"read":""}" onclick="openReader('${a.id}')">
         ${img}
@@ -418,7 +346,8 @@
     document.getElementById("r-domain").textContent = a.domain || "";
     document.getElementById("r-title-header").textContent = a.title || a.url;
     document.getElementById("r-title").textContent = a.title || a.url;
-    document.getElementById("r-byline").textContent = a.domain ? `From ${a.domain}` : "";
+    const bylineParts = [a.author, a.date].filter(Boolean);
+    document.getElementById("r-byline").textContent = bylineParts.length ? bylineParts.join(" · ") : (a.domain ? `From ${a.domain}` : "");
     document.getElementById("r-fav-btn").textContent = a.favourite ? "★" : "☆";
     document.getElementById("r-fav-btn").classList.toggle("active", !!a.favourite);
     document.getElementById("r-source-link").href = a.url;
@@ -429,10 +358,8 @@
       body.querySelectorAll("script,style,iframe").forEach(el => el.remove());
     } else {
       body.innerHTML = `
-        <p style="color:var(--text-muted);margin-bottom:16px">
-          The full article content couldn't be extracted — this can happen with paywalled or JavaScript-heavy sites.
-        </p>
-        <a href="${escHtml(a.url)}" target="_blank" rel="noopener" 
+        <p style="color:var(--text-muted);margin-bottom:16px">Full article content could not be extracted — this happens with paywalled or heavily JavaScript-rendered pages.</p>
+        <a href="${escHtml(a.url)}" target="_blank" rel="noopener"
            style="display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:600">
           Read on original site ↗
         </a>`;
@@ -440,7 +367,6 @@
 
     document.getElementById("reader-view").classList.add("open");
     document.body.style.overflow = "hidden";
-
     if (!a.read) await updateDoc(doc(db, COL, id), { read: true });
   };
 
