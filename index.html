@@ -8,491 +8,106 @@
   <meta name="theme-color" content="#1a1a2e" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
-
   <style>
     :root {
-      --bg: #0f0f1a;
-      --surface: #1a1a2e;
-      --surface2: #22223b;
-      --accent: #e07b54;
-      --accent2: #7c6af5;
-      --text: #e8e8f0;
-      --text-muted: #888899;
-      --border: #2a2a3e;
-      --tag-bg: #2a2a3e;
-      --success: #4caf82;
-      --radius: 10px;
-      --font-body: 'Inter', sans-serif;
-      --font-display: 'Lora', serif;
+      --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #22223b;
+      --accent: #e07b54; --accent2: #7c6af5; --text: #e8e8f0;
+      --text-muted: #888899; --border: #2a2a3e; --tag-bg: #2a2a3e;
+      --success: #4caf82; --radius: 10px;
+      --font-body: 'Inter', sans-serif; --font-display: 'Lora', serif;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      min-height: 100vh;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    /* ── Layout ── */
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; font-size: 15px; line-height: 1.6; }
     #app { display: flex; flex-direction: column; min-height: 100vh; }
-
-    header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 20px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      font-family: var(--font-display);
-      font-size: 1.3rem;
-      color: var(--accent);
-      letter-spacing: -0.5px;
-    }
-
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { font-family: var(--font-display); font-size: 1.3rem; color: var(--accent); letter-spacing: -0.5px; }
     .logo span { color: var(--text-muted); font-style: italic; font-size: 0.85rem; margin-left: 6px; }
-
     nav { display: flex; gap: 4px; }
-
-    nav button {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    nav button.active, nav button:hover {
-      background: var(--surface2);
-      color: var(--text);
-    }
-
+    nav button { background: none; border: none; color: var(--text-muted); font-family: var(--font-body); font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+    nav button.active, nav button:hover { background: var(--surface2); color: var(--text); }
     nav button.active { color: var(--accent); }
-
     main { flex: 1; padding: 24px 20px; max-width: 900px; margin: 0 auto; width: 100%; }
-
-    /* ── Save bar ── */
-    .save-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 28px;
-    }
-
-    .save-bar input {
-      flex: 1;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      padding: 10px 14px;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
+    .save-bar { display: flex; gap: 10px; margin-bottom: 28px; }
+    .save-bar input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font-body); font-size: 0.9rem; padding: 10px 14px; outline: none; transition: border-color 0.15s; }
     .save-bar input:focus { border-color: var(--accent2); }
     .save-bar input::placeholder { color: var(--text-muted); }
-
-    .btn {
-      background: var(--accent);
-      border: none;
-      border-radius: var(--radius);
-      color: #fff;
-      cursor: pointer;
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      font-weight: 600;
-      padding: 10px 18px;
-      transition: opacity 0.15s, transform 0.1s;
-      white-space: nowrap;
-    }
-
-    .btn:hover { opacity: 0.88; }
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn { background: var(--accent); border: none; border-radius: var(--radius); color: #fff; cursor: pointer; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; padding: 10px 18px; transition: opacity 0.15s, transform 0.1s; white-space: nowrap; }
+    .btn:hover { opacity: 0.88; } .btn:active { transform: scale(0.97); } .btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .btn.secondary { background: var(--surface2); color: var(--text); }
-    .btn.danger { background: #c0392b; }
-
-    /* ── Filters ── */
-    .filters {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .filter-tag {
-      background: var(--tag-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.8rem;
-      padding: 4px 12px;
-      transition: all 0.15s;
-    }
-
-    .filter-tag.active, .filter-tag:hover {
-      background: var(--accent2);
-      border-color: var(--accent2);
-      color: #fff;
-    }
-
-    .search-input {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      padding: 4px 14px;
-      outline: none;
-      margin-left: auto;
-      width: 180px;
-      transition: border-color 0.15s;
-    }
-
+    .filters { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .filter-tag { background: var(--tag-bg); border: 1px solid var(--border); border-radius: 20px; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; padding: 4px 12px; transition: all 0.15s; }
+    .filter-tag.active, .filter-tag:hover { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+    .search-input { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; color: var(--text); font-family: var(--font-body); font-size: 0.8rem; padding: 4px 14px; outline: none; margin-left: auto; width: 180px; transition: border-color 0.15s; }
     .search-input:focus { border-color: var(--accent2); }
     .search-input::placeholder { color: var(--text-muted); }
-
-    /* ── Article cards ── */
-    .articles-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      cursor: pointer;
-      overflow: hidden;
-      transition: border-color 0.15s, transform 0.15s;
-      display: flex;
-      flex-direction: column;
-    }
-
+    .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; overflow: hidden; transition: border-color 0.15s, transform 0.15s; display: flex; flex-direction: column; }
     .card:hover { border-color: var(--accent2); transform: translateY(-2px); }
     .card.read { opacity: 0.55; }
-
-    .card-image {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      background: var(--surface2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-size: 2rem;
-    }
-
+    .card-image { width: 100%; height: 140px; background: var(--surface2); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 2rem; overflow: hidden; }
     .card-image img { width: 100%; height: 100%; object-fit: cover; }
-
     .card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
-
-    .card-title {
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 600;
-      line-height: 1.35;
-      color: var(--text);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .card-domain {
-      font-size: 0.75rem;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .card-excerpt {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      flex: 1;
-    }
-
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      border-top: 1px solid var(--border);
-      gap: 8px;
-    }
-
+    .card-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; line-height: 1.35; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-domain { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-excerpt { font-size: 0.82rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-top: 1px solid var(--border); gap: 8px; }
     .card-tags { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
-
-    .tag {
-      background: var(--tag-bg);
-      border-radius: 4px;
-      color: var(--text-muted);
-      font-size: 0.7rem;
-      padding: 2px 7px;
-    }
-
+    .tag { background: var(--tag-bg); border-radius: 4px; color: var(--text-muted); font-size: 0.7rem; padding: 2px 7px; }
     .card-actions { display: flex; gap: 6px; }
-
-    .icon-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 4px;
-      border-radius: 4px;
-      transition: color 0.15s, background 0.15s;
-      line-height: 1;
-    }
-
+    .icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 4px; border-radius: 4px; transition: color 0.15s, background 0.15s; line-height: 1; }
     .icon-btn:hover { color: var(--text); background: var(--surface2); }
     .icon-btn.active { color: var(--accent); }
-
-    /* ── Empty state ── */
-    .empty {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
-
+    .empty { text-align: center; padding: 60px 20px; color: var(--text-muted); }
     .empty-icon { font-size: 3rem; margin-bottom: 16px; }
     .empty h3 { font-family: var(--font-display); font-size: 1.2rem; color: var(--text); margin-bottom: 8px; }
     .empty p { font-size: 0.9rem; }
-
-    /* ── Reader view ── */
-    #reader-view {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 200;
-      overflow-y: auto;
-    }
-
+    #reader-view { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; overflow-y: auto; }
     #reader-view.open { display: block; }
-
-    .reader-header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .reader-header .back-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1.4rem;
-      line-height: 1;
-      padding: 4px;
-      transition: color 0.15s;
-    }
-
+    .reader-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 10; }
+    .reader-header .back-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.4rem; line-height: 1; padding: 4px; transition: color 0.15s; }
     .reader-header .back-btn:hover { color: var(--text); }
-
     .reader-meta { flex: 1; min-width: 0; }
     .reader-meta .r-domain { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
     .reader-meta .r-title { font-family: var(--font-display); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
     .reader-actions { display: flex; gap: 8px; }
-
-    .reader-content {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .reader-content h1 {
-      font-family: var(--font-display);
-      font-size: 1.9rem;
-      line-height: 1.25;
-      margin-bottom: 16px;
-      color: var(--text);
-    }
-
-    .reader-content .byline {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 28px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .reader-content .article-body {
-      font-size: 1.05rem;
-      line-height: 1.85;
-      color: #d0d0e0;
-    }
-
+    .reader-content { max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; }
+    .reader-content h1 { font-family: var(--font-display); font-size: 1.9rem; line-height: 1.25; margin-bottom: 16px; color: var(--text); }
+    .reader-content .byline { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .reader-content .article-body { font-size: 1.05rem; line-height: 1.85; color: #d0d0e0; }
     .reader-content .article-body p { margin-bottom: 1.2em; }
-    .reader-content .article-body h2, .reader-content .article-body h3 {
-      font-family: var(--font-display);
-      color: var(--text);
-      margin: 1.5em 0 0.6em;
-    }
+    .reader-content .article-body h2, .reader-content .article-body h3 { font-family: var(--font-display); color: var(--text); margin: 1.5em 0 0.6em; }
     .reader-content .article-body a { color: var(--accent2); text-decoration: none; }
     .reader-content .article-body a:hover { text-decoration: underline; }
     .reader-content .article-body img { max-width: 100%; border-radius: 8px; margin: 1em 0; }
-    .reader-content .article-body blockquote {
-      border-left: 3px solid var(--accent);
-      margin: 1.2em 0;
-      padding: 4px 0 4px 18px;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .reader-source {
-      margin-top: 32px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
+    .reader-content .article-body blockquote { border-left: 3px solid var(--accent); margin: 1.2em 0; padding: 4px 0 4px 18px; color: var(--text-muted); font-style: italic; }
+    .reader-source { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted); }
     .reader-source a { color: var(--accent2); }
-
-    /* ── Tag editor modal ── */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 300;
-      align-items: center;
-      justify-content: center;
-    }
-
+    .fetch-status { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      width: 380px;
-      max-width: 90vw;
-    }
-
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: 380px; max-width: 90vw; }
     .modal h3 { font-family: var(--font-display); margin-bottom: 16px; }
-
     .tag-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
-
-    .tag-input-row input {
-      flex: 1;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      padding: 8px 12px;
-      outline: none;
-    }
-
+    .tag-input-row input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: var(--font-body); font-size: 0.9rem; padding: 8px 12px; outline: none; }
     .current-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; min-height: 28px; }
-
-    .current-tags .tag {
-      cursor: pointer;
-      transition: background 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
+    .current-tags .tag { cursor: pointer; transition: background 0.15s; display: flex; align-items: center; gap: 4px; }
     .current-tags .tag:hover { background: #c0392b; color: #fff; }
-
     .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
-
-    /* ── Toast ── */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 0.85rem;
-      padding: 10px 18px;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.25s;
-      z-index: 999;
-      white-space: nowrap;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.85rem; padding: 10px 18px; opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .toast.success { border-color: var(--success); color: var(--success); }
     .toast.error { border-color: #c0392b; color: #e74c3c; }
-
-    /* ── Loading spinner ── */
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      vertical-align: middle;
-    }
-
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Responsive ── */
     @media (max-width: 600px) {
-      header { padding: 0 14px; }
-      main { padding: 16px 14px; }
-      .articles-grid { grid-template-columns: 1fr; }
-      .save-bar { flex-direction: column; }
-      .reader-content { padding: 24px 16px 60px; }
-      .reader-content h1 { font-size: 1.4rem; }
+      header { padding: 0 14px; } main { padding: 16px 14px; }
+      .articles-grid { grid-template-columns: 1fr; } .save-bar { flex-direction: column; }
+      .reader-content { padding: 24px 16px 60px; } .reader-content h1 { font-size: 1.4rem; }
       .search-input { width: 130px; }
     }
-
-    /* ── Archived / Favourites views ── */
-    .view { display: none; }
-    .view.active { display: block; }
+    .view { display: none; } .view.active { display: block; }
   </style>
 </head>
 <body>
@@ -505,9 +120,7 @@
       <button data-view="archived" onclick="switchView('archived', this)">✓ Archived</button>
     </nav>
   </header>
-
   <main>
-    <!-- Home view -->
     <div id="view-home" class="view active">
       <div class="save-bar">
         <input type="url" id="url-input" placeholder="Paste a URL to save…" onkeydown="if(event.key==='Enter') saveArticle()" />
@@ -518,27 +131,14 @@
         <input class="search-input" id="search-input" type="text" placeholder="Search…" oninput="renderArticles()" />
       </div>
       <div class="articles-grid" id="articles-container">
-        <div class="empty">
-          <div class="empty-icon">📖</div>
-          <h3>Nothing saved yet</h3>
-          <p>Paste a URL above to save your first article.</p>
-        </div>
+        <div class="empty"><div class="empty-icon">📖</div><h3>Nothing saved yet</h3><p>Paste a URL above to save your first article.</p></div>
       </div>
     </div>
-
-    <!-- Favourites view -->
-    <div id="view-favourites" class="view">
-      <div class="articles-grid" id="fav-container"></div>
-    </div>
-
-    <!-- Archived view -->
-    <div id="view-archived" class="view">
-      <div class="articles-grid" id="arc-container"></div>
-    </div>
+    <div id="view-favourites" class="view"><div class="articles-grid" id="fav-container"></div></div>
+    <div id="view-archived" class="view"><div class="articles-grid" id="arc-container"></div></div>
   </main>
 </div>
 
-<!-- Reader overlay -->
 <div id="reader-view">
   <div class="reader-header">
     <button class="back-btn" onclick="closeReader()">←</button>
@@ -556,13 +156,10 @@
     <h1 id="r-title"></h1>
     <div class="byline" id="r-byline"></div>
     <div class="article-body" id="r-body"></div>
-    <div class="reader-source">
-      Read full article: <a id="r-source-link" href="#" target="_blank" rel="noopener">original source ↗</a>
-    </div>
+    <div class="reader-source">Read full article: <a id="r-source-link" href="#" target="_blank" rel="noopener">original source ↗</a></div>
   </div>
 </div>
 
-<!-- Tag modal -->
 <div class="modal-overlay" id="tag-modal">
   <div class="modal">
     <h3>Edit tags</h3>
@@ -578,18 +175,12 @@
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-  import {
-    getFirestore, collection, addDoc, getDocs, doc,
-    updateDoc, deleteDoc, query, orderBy, onSnapshot
-  } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-  // ── Firebase config ──────────────────────────────────────────
   const firebaseConfig = {
     apiKey: "AIzaSyCA3uEIOscPIYaXWA7E2Ppeje7aypMptXE",
     authDomain: "my-reader-23547.firebaseapp.com",
@@ -603,21 +194,111 @@
   const db = getFirestore(app);
   const COL = "articles";
 
-  // ── State ────────────────────────────────────────────────────
   window._articles = [];
   window._activeTag = "all";
   window._currentReaderId = null;
   window._editingTagsId = null;
   window._editingTags = [];
 
-  // ── Real-time listener ───────────────────────────────────────
   const q = query(collection(db, COL), orderBy("savedAt", "desc"));
   onSnapshot(q, snap => {
     window._articles = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAll();
   });
 
-  // ── Save article ─────────────────────────────────────────────
+  // ── Article fetching with multiple proxies ──
+  async function fetchArticleData(url) {
+    const proxies = [
+      `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+      `https://corsproxy.io/?${encodeURIComponent(url)}`,
+      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+    ];
+
+    let html = null;
+
+    // Try allorigins first (returns JSON)
+    try {
+      const res = await fetch(proxies[0], { signal: AbortSignal.timeout(8000) });
+      const json = await res.json();
+      if (json.contents && json.contents.length > 500) html = json.contents;
+    } catch(e) {}
+
+    // Try corsproxy (returns raw HTML)
+    if (!html) {
+      try {
+        const res = await fetch(proxies[1], { signal: AbortSignal.timeout(8000) });
+        const text = await res.text();
+        if (text && text.length > 500) html = text;
+      } catch(e) {}
+    }
+
+    // Try codetabs
+    if (!html) {
+      try {
+        const res = await fetch(proxies[2], { signal: AbortSignal.timeout(8000) });
+        const text = await res.text();
+        if (text && text.length > 500) html = text;
+      } catch(e) {}
+    }
+
+    if (!html) throw new Error("All proxies failed");
+
+    const parser = new DOMParser();
+    const doc2 = parser.parseFromString(html, "text/html");
+
+    // Fix relative URLs for images
+    doc2.querySelectorAll('img[src]').forEach(img => {
+      try {
+        img.src = new URL(img.getAttribute('src'), url).href;
+      } catch(e) {}
+    });
+
+    const title =
+      doc2.querySelector('meta[property="og:title"]')?.getAttribute('content') ||
+      doc2.querySelector('meta[name="twitter:title"]')?.getAttribute('content') ||
+      doc2.querySelector('title')?.textContent || "";
+
+    const excerpt =
+      doc2.querySelector('meta[property="og:description"]')?.getAttribute('content') ||
+      doc2.querySelector('meta[name="description"]')?.getAttribute('content') ||
+      doc2.querySelector('meta[name="twitter:description"]')?.getAttribute('content') || "";
+
+    const image =
+      doc2.querySelector('meta[property="og:image"]')?.getAttribute('content') ||
+      doc2.querySelector('meta[name="twitter:image"]')?.getAttribute('content') || "";
+
+    // Try to find main content using common selectors
+    const contentSelectors = [
+      'article', '[role="main"]', 'main', '.article-body', '.post-body',
+      '.post-content', '.entry-content', '.content-body', '.story-body',
+      '.article__body', '.article-content', '.story-content', '#article-body',
+      '.paywall', '.post', '#content', '.content'
+    ];
+
+    let articleEl = null;
+    for (const sel of contentSelectors) {
+      const el = doc2.querySelector(sel);
+      if (el && el.textContent.trim().length > 200) { articleEl = el; break; }
+    }
+
+    if (!articleEl) articleEl = doc2.body;
+
+    const clone = articleEl.cloneNode(true);
+    // Remove noise elements
+    clone.querySelectorAll([
+      'script', 'style', 'nav', 'header', 'footer', 'aside', 'form',
+      'iframe', 'button', '.ad', '.ads', '.advertisement', '.social-share',
+      '.related', '.recommended', '.newsletter', '.cookie', '.popup',
+      '[class*="share"]', '[class*="social"]', '[class*="comment"]',
+      '[class*="subscribe"]', '[id*="comment"]', '[id*="sidebar"]'
+    ].join(',')).forEach(el => el.remove());
+
+    // Convert to clean paragraphs
+    const content = clone.innerHTML;
+
+    return { title: title.trim(), excerpt: excerpt.trim(), image: image.trim(), content };
+  }
+
   window.saveArticle = async function () {
     const input = document.getElementById("url-input");
     const btn = document.getElementById("save-btn");
@@ -628,94 +309,49 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>';
 
+    let articleData = { title: "", excerpt: "", image: "", content: "" };
+    let fetchSuccess = false;
+
     try {
-      const data = await fetchArticleData(url);
-      await addDoc(collection(db, COL), {
-        url,
-        title: data.title || url,
-        excerpt: data.excerpt || "",
-        image: data.image || "",
-        content: data.content || "",
-        domain: getDomain(url),
-        tags: [],
-        favourite: false,
-        archived: false,
-        read: false,
-        savedAt: Date.now()
-      });
-      input.value = "";
-      showToast("Article saved ✓", "success");
-    } catch (e) {
-      showToast("Couldn't fetch article — saved URL only", "error");
-      await addDoc(collection(db, COL), {
-        url, title: url, excerpt: "", image: "", content: "",
-        domain: getDomain(url), tags: [], favourite: false,
-        archived: false, read: false, savedAt: Date.now()
-      });
-      input.value = "";
+      articleData = await fetchArticleData(url);
+      fetchSuccess = true;
+    } catch(e) {
+      // Will save URL only with a note
     }
+
+    await addDoc(collection(db, COL), {
+      url,
+      title: articleData.title || getDomain(url),
+      excerpt: articleData.excerpt || "",
+      image: articleData.image || "",
+      content: articleData.content || "",
+      domain: getDomain(url),
+      tags: [],
+      favourite: false,
+      archived: false,
+      read: false,
+      fetchSuccess,
+      savedAt: Date.now()
+    });
+
+    input.value = "";
+    showToast(fetchSuccess ? "Article saved ✓" : "URL saved (content unavailable)", fetchSuccess ? "success" : "");
 
     btn.disabled = false;
     btn.textContent = "Save";
   };
 
-  // ── Fetch article metadata via allorigins proxy ───────────────
-  async function fetchArticleData(url) {
-    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxy);
-    const json = await res.json();
-    const html = json.contents;
-    const parser = new DOMParser();
-    const doc2 = parser.parseFromString(html, "text/html");
-
-    const title =
-      doc2.querySelector('meta[property="og:title"]')?.content ||
-      doc2.querySelector('title')?.textContent ||
-      "";
-
-    const excerpt =
-      doc2.querySelector('meta[property="og:description"]')?.content ||
-      doc2.querySelector('meta[name="description"]')?.content ||
-      "";
-
-    const image =
-      doc2.querySelector('meta[property="og:image"]')?.content || "";
-
-    // Try to extract main article body
-    const article =
-      doc2.querySelector("article") ||
-      doc2.querySelector('[role="main"]') ||
-      doc2.querySelector("main") ||
-      doc2.querySelector(".post-content") ||
-      doc2.querySelector(".article-body") ||
-      doc2.querySelector(".entry-content") ||
-      doc2.body;
-
-    // Clean up the content
-    const clone = article.cloneNode(true);
-    clone.querySelectorAll("script,style,nav,header,footer,aside,form,iframe,button").forEach(el => el.remove());
-    const content = clone.innerHTML;
-
-    return { title: title.trim(), excerpt: excerpt.trim(), image, content };
-  }
-
-  // ── Render ───────────────────────────────────────────────────
-  window.renderAll = function () {
-    renderArticles();
-    renderFavourites();
-    renderArchived();
-    renderTagFilters();
-  };
+  window.renderAll = function () { renderArticles(); renderFavourites(); renderArchived(); renderTagFilters(); };
 
   window.renderArticles = function () {
     const container = document.getElementById("articles-container");
-    const search = document.getElementById("search-input").value.toLowerCase();
+    const search = document.getElementById("search-input")?.value.toLowerCase() || "";
     let items = window._articles.filter(a => !a.archived);
-    if (window._activeTag !== "all") items = items.filter(a => a.tags && a.tags.includes(window._activeTag));
+    if (window._activeTag !== "all") items = items.filter(a => a.tags?.includes(window._activeTag));
     if (search) items = items.filter(a =>
-      (a.title || "").toLowerCase().includes(search) ||
-      (a.excerpt || "").toLowerCase().includes(search) ||
-      (a.domain || "").toLowerCase().includes(search)
+      (a.title||"").toLowerCase().includes(search) ||
+      (a.excerpt||"").toLowerCase().includes(search) ||
+      (a.domain||"").toLowerCase().includes(search)
     );
     container.innerHTML = items.length ? items.map(cardHTML).join("") : emptyHTML("No saved articles", "Paste a URL above to get started.");
   };
@@ -735,13 +371,11 @@
   window.renderTagFilters = function () {
     const allTags = [...new Set(window._articles.flatMap(a => a.tags || []))].sort();
     const container = document.getElementById("tag-filters");
-    const search = container.querySelector(".search-input").outerHTML;
+    const searchHTML = `<input class="search-input" type="text" placeholder="Search…" oninput="renderArticles()" />`;
     container.innerHTML = `
-      <span class="filter-tag ${window._activeTag === "all" ? "active" : ""}" data-tag="all" onclick="filterByTag('all', this)">All</span>
-      ${allTags.map(t => `<span class="filter-tag ${window._activeTag === t ? "active" : ""}" data-tag="${t}" onclick="filterByTag('${t}', this)">${t}</span>`).join("")}
-      ${search}
-    `;
-    // Re-attach search listener
+      <span class="filter-tag ${window._activeTag==="all"?"active":""}" data-tag="all" onclick="filterByTag('all',this)">All</span>
+      ${allTags.map(t=>`<span class="filter-tag ${window._activeTag===t?"active":""}" data-tag="${t}" onclick="filterByTag('${t}',this)">${t}</span>`).join("")}
+      ${searchHTML}`;
     container.querySelector(".search-input").addEventListener("input", renderArticles);
   };
 
@@ -749,21 +383,23 @@
     const img = a.image
       ? `<div class="card-image"><img src="${a.image}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='📄'" /></div>`
       : `<div class="card-image">📄</div>`;
-    const tags = (a.tags || []).map(t => `<span class="tag">${t}</span>`).join("");
+    const tags = (a.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("");
+    const noContent = !a.fetchSuccess && !a.content ? `<div style="font-size:0.72rem;color:var(--accent);margin-top:4px">⚠ Content unavailable — opens original</div>` : "";
     return `
-      <div class="card ${a.read ? "read" : ""}" onclick="openReader('${a.id}')">
+      <div class="card ${a.read?"read":""}" onclick="openReader('${a.id}')">
         ${img}
         <div class="card-body">
-          <div class="card-domain">${a.domain || ""}</div>
-          <div class="card-title">${escHtml(a.title || a.url)}</div>
-          ${a.excerpt ? `<div class="card-excerpt">${escHtml(a.excerpt)}</div>` : ""}
+          <div class="card-domain">${a.domain||""}</div>
+          <div class="card-title">${escHtml(a.title||a.url)}</div>
+          ${a.excerpt?`<div class="card-excerpt">${escHtml(a.excerpt)}</div>`:""}
+          ${noContent}
         </div>
         <div class="card-footer">
           <div class="card-tags">${tags}</div>
           <div class="card-actions" onclick="event.stopPropagation()">
-            <button class="icon-btn ${a.favourite ? "active" : ""}" title="Favourite" onclick="toggleFav('${a.id}')">${a.favourite ? "★" : "☆"}</button>
+            <button class="icon-btn ${a.favourite?"active":""}" title="Favourite" onclick="toggleFav('${a.id}')">${a.favourite?"★":"☆"}</button>
             <button class="icon-btn" title="Tags" onclick="openTagModal('${a.id}')">🏷</button>
-            <button class="icon-btn" title="Archive" onclick="archiveArticle('${a.id}')">${a.archived ? "↩" : "✓"}</button>
+            <button class="icon-btn" title="Archive" onclick="archiveArticle('${a.id}')">${a.archived?"↩":"✓"}</button>
             <button class="icon-btn" title="Delete" onclick="deleteArticle('${a.id}')">🗑</button>
           </div>
         </div>
@@ -774,7 +410,6 @@
     return `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📭</div><h3>${title}</h3><p>${sub}</p></div>`;
   }
 
-  // ── Reader ───────────────────────────────────────────────────
   window.openReader = async function (id) {
     const a = window._articles.find(x => x.id === id);
     if (!a) return;
@@ -789,21 +424,24 @@
     document.getElementById("r-source-link").href = a.url;
 
     const body = document.getElementById("r-body");
-    if (a.content) {
+    if (a.content && a.content.length > 100) {
       body.innerHTML = a.content;
-      // Remove bad scripts from injected HTML
       body.querySelectorAll("script,style,iframe").forEach(el => el.remove());
     } else {
-      body.innerHTML = `<p style="color:var(--text-muted)">No content extracted. <a href="${a.url}" target="_blank" rel="noopener" style="color:var(--accent2)">Read on original site ↗</a></p>`;
+      body.innerHTML = `
+        <p style="color:var(--text-muted);margin-bottom:16px">
+          The full article content couldn't be extracted — this can happen with paywalled or JavaScript-heavy sites.
+        </p>
+        <a href="${escHtml(a.url)}" target="_blank" rel="noopener" 
+           style="display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:600">
+          Read on original site ↗
+        </a>`;
     }
 
     document.getElementById("reader-view").classList.add("open");
     document.body.style.overflow = "hidden";
 
-    // Mark as read
-    if (!a.read) {
-      await updateDoc(doc(db, COL, id), { read: true });
-    }
+    if (!a.read) await updateDoc(doc(db, COL, id), { read: true });
   };
 
   window.closeReader = function () {
@@ -815,8 +453,7 @@
   window.toggleReaderFav = async function () {
     if (!window._currentReaderId) return;
     const a = window._articles.find(x => x.id === window._currentReaderId);
-    if (!a) return;
-    await updateDoc(doc(db, COL, window._currentReaderId), { favourite: !a.favourite });
+    if (a) await updateDoc(doc(db, COL, window._currentReaderId), { favourite: !a.favourite });
   };
 
   window.openOriginal = function () {
@@ -831,11 +468,9 @@
     showToast("Archived ✓", "success");
   };
 
-  // ── CRUD helpers ─────────────────────────────────────────────
   window.toggleFav = async function (id) {
     const a = window._articles.find(x => x.id === id);
-    if (!a) return;
-    await updateDoc(doc(db, COL, id), { favourite: !a.favourite });
+    if (a) await updateDoc(doc(db, COL, id), { favourite: !a.favourite });
   };
 
   window.archiveArticle = async function (id) {
@@ -851,43 +486,31 @@
     showToast("Deleted", "");
   };
 
-  // ── Tag modal ────────────────────────────────────────────────
   window.openTagModal = function (id) {
     const a = window._articles.find(x => x.id === id);
     if (!a) return;
     window._editingTagsId = id;
-    window._editingTags = [...(a.tags || [])];
+    window._editingTags = [...(a.tags||[])];
     renderCurrentTags();
     document.getElementById("new-tag-input").value = "";
     document.getElementById("tag-modal").classList.add("open");
   };
 
-  window.closeTagModal = function () {
-    document.getElementById("tag-modal").classList.remove("open");
-  };
+  window.closeTagModal = function () { document.getElementById("tag-modal").classList.remove("open"); };
 
   window.addTag = function () {
     const input = document.getElementById("new-tag-input");
     const val = input.value.trim().toLowerCase();
-    if (val && !window._editingTags.includes(val)) {
-      window._editingTags.push(val);
-      renderCurrentTags();
-    }
-    input.value = "";
-    input.focus();
+    if (val && !window._editingTags.includes(val)) { window._editingTags.push(val); renderCurrentTags(); }
+    input.value = ""; input.focus();
   };
 
   function renderCurrentTags() {
-    const c = document.getElementById("current-tags-display");
-    c.innerHTML = window._editingTags.map(t =>
-      `<span class="tag" onclick="removeTag('${t}')">${t} ×</span>`
-    ).join("");
+    document.getElementById("current-tags-display").innerHTML =
+      window._editingTags.map(t=>`<span class="tag" onclick="removeTag('${t}')">${t} ×</span>`).join("");
   }
 
-  window.removeTag = function (t) {
-    window._editingTags = window._editingTags.filter(x => x !== t);
-    renderCurrentTags();
-  };
+  window.removeTag = function (t) { window._editingTags = window._editingTags.filter(x=>x!==t); renderCurrentTags(); };
 
   window.saveTagsFromModal = async function () {
     if (!window._editingTagsId) return;
@@ -896,52 +519,39 @@
     showToast("Tags saved ✓", "success");
   };
 
-  // ── Filters ──────────────────────────────────────────────────
   window.filterByTag = function (tag, el) {
     window._activeTag = tag;
-    document.querySelectorAll(".filter-tag").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".filter-tag").forEach(t=>t.classList.remove("active"));
     el.classList.add("active");
     renderArticles();
   };
 
-  // ── View switching ───────────────────────────────────────────
   window.switchView = function (view, btn) {
-    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-    document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-    document.getElementById("view-" + view).classList.add("active");
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+    document.getElementById("view-"+view).classList.add("active");
     btn.classList.add("active");
   };
 
-  // ── Utilities ────────────────────────────────────────────────
-  function getDomain(url) {
-    try { return new URL(url).hostname.replace("www.", ""); } catch { return ""; }
-  }
-
-  function escHtml(str) {
-    return (str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
+  function getDomain(url) { try { return new URL(url).hostname.replace("www.",""); } catch { return ""; } }
+  function escHtml(str) { return (str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
   let toastTimer;
   window.showToast = function (msg, type) {
     const t = document.getElementById("toast");
     t.textContent = msg;
-    t.className = "toast show" + (type ? " " + type : "");
+    t.className = "toast show" + (type?" "+type:"");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+    toastTimer = setTimeout(()=>t.classList.remove("show"), 2800);
   };
 
-  // Close reader on Escape
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
+    if (e.key==="Escape") {
       if (document.getElementById("tag-modal").classList.contains("open")) closeTagModal();
       else if (document.getElementById("reader-view").classList.contains("open")) closeReader();
     }
   });
-
-  // Close modal on overlay click
-  document.getElementById("tag-modal").addEventListener("click", function (e) {
-    if (e.target === this) closeTagModal();
-  });
+  document.getElementById("tag-modal").addEventListener("click", function(e) { if(e.target===this) closeTagModal(); });
 </script>
 </body>
 </html>
